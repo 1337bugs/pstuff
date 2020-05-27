@@ -1,15 +1,46 @@
-class Journal:
+def to_letters(grades):
+    res = ""
+    for grade in grades:
+        if grade >= 95.0:
+            res += "A"
+        elif grade >= 85.0:
+            res += "B"
+        elif grade >= 75.0:
+            res += "C"
+        elif grade >= 65.0:
+            res += "D"
+        elif grade >= 60.0:
+            res += "E"
+        elif grade < 60.0:
+            res += "F"
+        res += " "
+    return res.strip()
 
+
+class Journal:
     student_data = []
 
     def __init__(self, students):
-        self.student_data.append([ item for item in students ])
+        for dict in students:
+            self.student_data.append(dict)
+
 
     def get_letter_grades(self, student_name):
-        pass
+        for dict in self.student_data:
+            if student_name in dict["name"]:
+                print("Grades of " + student_name +": ")
+                print("Homework:", to_letters(dict["homework"]))
+                print("Quizzes:", to_letters(dict["quizzes"]))
+                print("Tests:", to_letters(dict["tests"]))
+                print()
 
     def get_student_average(self, student_name):
         pass
+
+
+
+
+
 
     def print_data(self):
         for item in self.student_data:
@@ -40,7 +71,17 @@ def main():
     ]
 
     journal = Journal(students)
-    journal.print_data()
+    #journal.print_data()
+    print()
+
+    #testing to_letters
+    #
+    #sample = [100.0, 92.0, 98.0, 100.0]
+    #res = ""
+    #res += to_letters(sample)
+    #print(res)
+
+    journal.get_letter_grades("Alice")
 
 
 
