@@ -1,5 +1,4 @@
 class Journal:
-    student_data = []
 
     def __init__(self, students):
         self.student_data = students
