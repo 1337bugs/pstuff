@@ -26,78 +26,33 @@ class Journal:
         grades = homework + quizzes + tests
         res = sum(grades)/len(grades)
         return res
-    """
-    def get_letter_grades(self, *students, throw_exception=True):
-        for dict in self.student_data:
-            if dict.get(name) not in students:
-            for name in students:
-                print(name)
-                if name in dict["name"]:
-                    print("Grades of " + name + ": ")
-                    print("Homework:", self.to_letters(dict["homework"]))
-                    print("Quizzes:", self.to_letters(dict["quizzes"]))
-                    print("Tests:", self.to_letters(dict["tests"]))
-                else:
-                    print("Name not found")
-                continue
-
-
-
-
-    def get_letter_grades(self, *students, throw_exception=False):
-        students_iter = iter(students)
-        for name in students:
-            for i in range(len(self.student_data)):
-                if throw_exception:
-                    if name in self.student_data[i].get("name"):
-                        print("Grades of " + name + ": ")
-                        print("Homework:", self.to_letters(self.student_data[i]["homework"]))
-                        print("Quizzes:", self.to_letters(self.student_data[i]["quizzes"]))
-                        print("Tests:", self.to_letters(self.student_data[i]["tests"]))
-                    else:
-                        print("Name not found")
-                        next(students_iter)
-                else:
-                    if name in self.student_data[i].get("name"):
-                        print("Grades of " + name + ": ")
-                        print("Homework:", self.to_letters(self.student_data[i]["homework"]))
-                        print("Quizzes:", self.to_letters(self.student_data[i]["quizzes"]))
-                        print("Tests:", self.to_letters(self.student_data[i]["tests"]))
-    """
-
 
     def inDict(self, name):
-        for i in range(len(self.student_data)):
-            if name in self.student_data[i]["name"]:
-                print("da")
-                return True
-            else:
-                print(name)
-                print("nyet")
-                return False
+        found = False
+        for dict in self.student_data:
+            if name in dict.values():
+                found = True
+                return found
+                break
+        return found
 
+    # getting info of 1 name
     def getDictInfo(self, name):
         for dict in self.student_data:
-            if dict.get(name) != None or dict.get(name) == name:
+            if dict.get("name") == name:
                 print("Grades of " + name + ": ")
-                print("Homework:", self.to_letters(dict.get("homework")))
-                print("Quizzes:", self.to_letters(dict.get("quizzes")))
-                print("Tests:", self.to_letters(dict.get("tests")))
-            else:
-                print("nichego")
+                print("Homework:", self.to_letters(dict["homework"]))
+                print("Quizzes:", self.to_letters(dict["quizzes"]))
+                print("Tests:", self.to_letters(dict["tests"]))
 
     def get_letter_grades(self, *students, throw_exception=False):
         for name in students:
             if self.inDict(name):
-                print(name)
                 self.getDictInfo(name)
-
-    """
-    def get_letter_grades(self, *students, throw_exception=False):
-        for name in students:
-            if name in self.student_data
-"""
-
+            else:
+                # if keyword specified, show error instead of skipping
+                if throw_exception:
+                    print("No such name")
 
     def get_student_average(self, *students, throw_exception=False):
         for dict in self.student_data:
@@ -135,10 +90,10 @@ def main():
     journal = Journal(students)
     print()
 
-    journal.get_letter_grades("Carl", "Alice", "Tyler", throw_exception=True)
+    journal.get_letter_grades("Carl", "Alice")
     #journal.get_student_average("Alice")
 
-    #journal.inDict("Carl")
+    #journal.inDict("Alice")
     #journal.getDictInfo("Carl")
 
     #journal.get_letter_grades("Tyler")
