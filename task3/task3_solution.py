@@ -123,7 +123,7 @@ def main():
 
     journal = Journal(students)
 
-    # uncomment following to test the task
+    # uncomment the following to test the task
 
     # journal.get_letter_grades("Carl", "Alice")
     # journal.get_student_average("Alice")
