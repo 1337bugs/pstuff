@@ -22,80 +22,51 @@ class Journal:
         return res.strip()
 
     # calc overall average grade
-    def avg_grade(self, grades):
+    # not universal
+    def avg_grade(self, homework, quizzes, tests):
+        grades = homework + quizzes + tests
         res = sum(grades)/len(grades)
-        return res
+        return f"{res:.2f}"
 
-    def inDict(self, name):
-        found = False
+    def get_letter_grades(self, *args, throw_exception=False):
         for dict in self.student_data:
-            if name in dict.values():
-                found = True
-                return found
-                break
-        return found
-
-    def get_letter_grades(self, *students, throw_exception=False):
-        for name in students:
-            # if name is present in dictionaries, do stuff
-            if self.inDict(name):
-                for dict in self.student_data:
-                    if dict.get("name") == name:
-                        print("Grades of " + name + ": ")
-                        temp = dict.copy()
-                        temp.pop("name")
-                        for work, grades in temp.items():
-                            print(work, self.to_letters(grades))
-
-                        # obsolete code, for testing purposes
-                        #
-                        # print("Homework:", self.to_letters(dict["homework"]))
-                        # print("Quizzes:", self.to_letters(dict["quizzes"]))
-                        # print("Tests:", self.to_letters(dict["tests"]))
+            if dict.get("name", 0) in args:
+                print("Grades of " + dict.get("name", 0) + ": ")
+                print("Homework:", self.to_letters(dict.get("homework", 0)))
+                print("Quizzes:", self.to_letters(dict.get("quizzes", 0)))
+                print("Tests:", self.to_letters(dict.get("tests", 0)))
             else:
                 # if keyword specified, show error instead of skipping
                 if throw_exception:
-                    print("No entry", name, "in table")
+                    print("No student with such name in table")
 
-    def get_student_average(self, *students, throw_exception=False):
-        for name in students:
-            # if name is present in dictionaries, do stuff
-            if self.inDict(name):
-                for dict in self.student_data:
-                    if dict.get("name") == name:
-                        temp = dict.copy()
-                        temp.pop("name")
-                        # there might be an overkill here or an easier way
-                        # to pass list of values to avg_grade
-                        list = []
-                        for values in temp.values():
-                            list.extend(values)
-                        print("Average grade of", name, ":",
-                              "{0:5.2f}".format(self.avg_grade(list)))
-
+    def get_student_average(self, *args, throw_exception=False):
+        for dict in self.student_data:
+            if dict.get("name", 0) in args:
+                print("Average grade of", dict.get("name", 0), ":",
+                      #adding 0 if no such key found, care
+                      self.avg_grade(dict.get("homework", 0),
+                                     dict.get("quizzes", 0),
+                                     dict.get("tests", 0)))
+                # debug
+                # print(dict.get("name", 0) in (i for i in args))
             else:
-                # if keyword specified, show error instead of skipping
                 if throw_exception:
-                    print("No entry", name, "in table")
+                    print("No student with such name in table")
 
     # to see the state of data
-    def test(self):
+    def show_data(self):
         for data in self.student_data:
-            print([value for key, value in data.items()])
+            print(data.values())
 
     def update_grade(self, student_name, throw_exception=False, **kwargs):
-        if self.inDict(student_name):
-            for dict in self.student_data:
-                # seems like im breaking DRY next line
-                if dict.get("name") == student_name:
-                    for new_work, new_grades in kwargs.items():
-                        for work, grades in dict.items():
-                            if work in new_work:
-                                grades.extend(new_grades)
-        else:
-            # if keyword specified, show error instead of skipping
-            if throw_exception:
-                print("No entry", student_name, "in table")
+        for dict in self.student_data:
+            if student_name in dict.get("name"):
+                for new_work, new_grades in kwargs.items():
+                    dict[new_work].extend(new_grades)
+            else:
+                if throw_exception:
+                    print("No entry", student_name, "in table")
 
 
 def main():
@@ -125,11 +96,13 @@ def main():
 
     # uncomment the following to test the task
 
-    # journal.get_letter_grades("Carl", "Alice")
-    # journal.get_student_average("Alice")
+    journal.get_letter_grades("Carl", "Alice", throw_exception=True)
+    print()
+    #journal.get_letter_grades("Carl", "Lloyd")
+    #journal.get_student_average("Alice", "Tyler")
+    print()
 
-    # journal.inDict("Alice")
-    # journal.get_dict_data("Carl")
+    #journal.get_student_average("Alice", "Carl", throw_exception=True)
 
     # journal.get_letter_grades("Tyler")
     # test_list = ["Tyler", "Lloyd", "Carl", "Alice"]
@@ -139,11 +112,12 @@ def main():
                          homework=[100.0],
                          tests=[90.0, 91.0, 85.0])
 
-    journal.update_grade("Alice",
+    journal.update_grade("Alice", throw_exception=True,
                          homework=[100.0],
                          tests=[90.0, 91.0, 85.0])
     # journal.get_student_average("Lloyd")
-    journal.test()
+
+    journal.show_data()
 
 
 if __name__ == "__main__":
