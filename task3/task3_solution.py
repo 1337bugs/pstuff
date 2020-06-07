@@ -21,52 +21,58 @@ class Journal:
             res += " "
         return res.strip()
 
-    # calc overall average grade
-    # not universal
     def avg_grade(self, homework, quizzes, tests):
+        """
+        Calculate overall average grade.
+        Returns formatted sum.
+        Not universal.
+        """
+
         grades = homework + quizzes + tests
         res = sum(grades)/len(grades)
         return f"{res:.2f}"
 
     def get_letter_grades(self, *args, throw_exception=False):
-        for dict in self.student_data:
-            if dict.get("name", 0) in args:
-                print("Grades of " + dict.get("name", 0) + ": ")
-                print("Homework:", self.to_letters(dict.get("homework", 0)))
-                print("Quizzes:", self.to_letters(dict.get("quizzes", 0)))
-                print("Tests:", self.to_letters(dict.get("tests", 0)))
+        for entry in self.student_data:
+            if entry.get("name", None) in args:
+                print("Grades of " + entry.get("name", 0) + ": ")
+                print("Homework:", self.to_letters(entry.get("homework", 0)))
+                print("Quizzes:", self.to_letters(entry.get("quizzes", 0)))
+                print("Tests:", self.to_letters(entry.get("tests", 0)))
             else:
                 # if keyword specified, show error instead of skipping
                 if throw_exception:
                     print("No student with such name in table")
 
     def get_student_average(self, *args, throw_exception=False):
-        for dict in self.student_data:
-            if dict.get("name", 0) in args:
-                print("Average grade of", dict.get("name", 0), ":",
+        for entry in self.student_data:
+            if entry.get("name", None) in args:
+                print("Average grade of", entry.get("name", 0), ":",
                       #adding 0 if no such key found, care
-                      self.avg_grade(dict.get("homework", 0),
-                                     dict.get("quizzes", 0),
-                                     dict.get("tests", 0)))
+                      self.avg_grade(entry.get("homework", 0),
+                                     entry.get("quizzes", 0),
+                                     entry.get("tests", 0)))
                 # debug
-                # print(dict.get("name", 0) in (i for i in args))
+                # print(entry.get("name", 0) in (i for i in args))
             else:
                 if throw_exception:
                     print("No student with such name in table")
 
-    # to see the state of data
     def show_data(self):
+        """ Used to check the state of data. """
+
         for data in self.student_data:
             print(data.values())
 
     def update_grade(self, student_name, throw_exception=False, **kwargs):
-        for dict in self.student_data:
-            if student_name in dict.get("name"):
+        match = 0
+        for entry in self.student_data:
+            if student_name == entry.get("name", ""):
                 for new_work, new_grades in kwargs.items():
-                    dict[new_work].extend(new_grades)
-            else:
-                if throw_exception:
-                    print("No entry", student_name, "in table")
+                    entry[new_work].extend(new_grades)
+                    match += 1
+        if throw_exception and match == 0:
+            print(f"No match for student {student_name}")
 
 
 def main():
@@ -102,7 +108,7 @@ def main():
     #journal.get_student_average("Alice", "Tyler")
     print()
 
-    #journal.get_student_average("Alice", "Carl", throw_exception=True)
+    journal.get_student_average("Alice", "Carl", throw_exception=True)
 
     # journal.get_letter_grades("Tyler")
     # test_list = ["Tyler", "Lloyd", "Carl", "Alice"]
