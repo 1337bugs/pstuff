@@ -26,7 +26,7 @@ In class `Student` we should have:
 If you think that classes miss some fields - updates are welcome \
 As for existing functions:
 * `avg_grade`, `get_letter_grades`, `get_student_average` should keep doing same thing, but now for all subjects separately
-* `update_grade` should accept one argument, which should contain subject name
+* `update_grade` should accept one more argument, which should contain subject name
 
 
 ### what to pay attention to:
@@ -41,7 +41,7 @@ As for existing functions:
 
 Students academic_subjects:
 ```python
-# for Lloyd:
+# for Lloyd TheRock student:
 {
     'math': {
       "homework": [90.0,97.0,75.0,92.0],
@@ -54,7 +54,7 @@ Students academic_subjects:
       "tests": [75.0,90.0]
     }
 }
-# for Alice student
+# for Alice Beyonce student:
 {
     'english': {
       "homework": [80.0,100.0,66.0,72.0],
@@ -68,7 +68,7 @@ Students academic_subjects:
     }
 }
 
-# for Tyler student
+# for Tyler Stalone student:
 {
     'music': {
       "homework": [98.0,97.0,96.0,95.0],
@@ -81,4 +81,11 @@ Students academic_subjects:
       "tests": [85.0,91.0]
     }
 }
+
+# for Barack Obama professor:
+academic_subjects = ['music', 'history', 'english']
+
+# for Tom Hanks professor:
+academic_subjects = ['math', 'physics', 'science']
+
 ```
